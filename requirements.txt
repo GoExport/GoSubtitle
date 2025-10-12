@@ -1,0 +1,4 @@
+# GoSubtitle Requirements
+# Install with: pip install -r requirements.txt
+
+PyQt6>=6.0.0

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TimelineObject</class>
+ <widget class="QWidget" name="TimelineObject">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>680</width>
+    <height>250</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Start: 1, End: 5</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="speaker">
+        <property name="text">
+         <string>Speaker 1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="content">
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="placeholderText">
+         <string>This is an example subtitle.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
