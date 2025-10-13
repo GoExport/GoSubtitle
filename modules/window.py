@@ -53,6 +53,7 @@ class MainWindow(QMainWindow):
         self.saveButton.clicked.connect(self.save_srt)
         self.offsetSpinBox.valueChanged.connect(self.offset_beginning)
         self.massButtonoSave.clicked.connect(self.mass_replace_speaker)
+        self.maxWordsSpinBox.valueChanged.connect(self.update_max_words_per_line)
         
         # State variables
         self.subtitles: List[Dict[str, any]] = []
@@ -235,6 +236,16 @@ class MainWindow(QMainWindow):
         
         self.display_subtitles(self.subtitles)
         logger.info(f"Applied offset delta of {offset_delta} frames (total offset: {offset})")
+    
+    def update_max_words_per_line(self, max_words: int) -> None:
+        """
+        Update the max words per line setting in the processor.
+        
+        Args:
+            max_words: Maximum number of words allowed per subtitle line
+        """
+        self.processor.max_words_per_line = max_words
+        logger.info(f"Updated max_words_per_line to {max_words}")
     
     def change_speaker(self, index: int, new_speaker: str) -> None:
         """
