@@ -1,6 +1,6 @@
 # GoSubtitle
 
-A PyQt6-based desktop application for converting Movie XML files to SRT subtitle format with speaker identification and timing controls.
+A PyQt6-based desktop application for converting Movie XML files to SRT subtitle format with speaker identification and timing controls. Also includes a powerful command-line interface for batch processing and automation.
 
 ## Features
 
@@ -13,10 +13,10 @@ A PyQt6-based desktop application for converting Movie XML files to SRT subtitle
   - Adjust subtitle timing with frame-based offset
   - Smart subtitle splitting based on word count and sentence boundaries
   - Automatic time distribution based on speaking rate
-- **Intuitive UI**:
-  - Timeline view of all subtitles
-  - Editable subtitle content and speaker names
-  - Proper keyboard navigation with Tab key support
+- **Dual Interface**:
+  - GUI mode with intuitive visual interface
+  - Console mode for batch processing and automation
+  - Automatic mode detection (console when available, GUI otherwise)
 - **Robust Error Handling**: Comprehensive logging and validation
 
 ## Requirements
@@ -35,6 +35,8 @@ pip install PyQt6
 
 ## Usage
 
+### GUI Mode
+
 1. Run the application:
 
 ```bash
@@ -46,6 +48,65 @@ python main.py
 4. Use the offset spinbox to adjust timing (in frames at 24 fps)
 5. Mass replace speaker names if needed
 6. Click "Save" to export as an SRT file
+
+### Console Mode
+
+The console mode activates automatically when running from a terminal/command prompt. Force GUI mode with the `-g` flag.
+
+**Basic usage:**
+
+```bash
+python main.py -f movie.xml
+```
+
+**Specify output file:**
+
+```bash
+python main.py -f movie.xml -s subtitles.srt
+```
+
+**Apply time offset (in frames):**
+
+```bash
+python main.py -f movie.xml -o 24
+```
+
+**Replace speaker names:**
+
+```bash
+python main.py -f movie.xml -r "John:Jane" -r "Bob:Robert"
+```
+
+**Set maximum words per line:**
+
+```bash
+python main.py -f movie.xml --max-words 15
+```
+
+**Display detailed statistics:**
+
+```bash
+python main.py -f movie.xml --verbose
+```
+
+**Combined example:**
+
+```bash
+python main.py -f movie.xml -s output.srt -o -12 -r "Unknown:Narrator" --max-words 12 --verbose
+```
+
+### Command-Line Options
+
+```
+-g, --gui              Force GUI mode even when console is available
+-f, --file PATH        Input Movie XML file path (required)
+-s, --srt PATH         Output SRT file path (default: input filename with .srt)
+-o, --offset FRAMES    Offset all subtitles by frames (can be negative)
+-w, --max-words COUNT  Maximum words per subtitle line (default: 10)
+-r, --replace OLD:NEW  Replace speaker names (can be used multiple times)
+-v, --verbose          Display detailed statistics about subtitles
+--version              Show program version and exit
+```
 
 ## Project Structure
 
