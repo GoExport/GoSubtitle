@@ -37,8 +37,8 @@ jobs:
       - name: Archive Windows Build
         if: matrix.os == 'windows-2022'
         run: |
-          powershell -Command "Compress-Archive -Path dist/* -DestinationPath GoSubtitle_win_installer_amd64.zip"
-          mv GoSubtitle_win_installer_amd64.zip dist/
+          powershell -Command "Compress-Archive -Path dist/* -DestinationPath GoSubtitle_win_portable_amd64.zip"
+          mv GoSubtitle_win_portable_amd64.zip dist/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -91,7 +91,7 @@ jobs:
           tag_name: ${{ github.ref_name }}
           files: |
             artifacts/**/GoSubtitle_linux_portable_amd64.tar.gz
-            artifacts/**/GoSubtitle_win_installer_amd64.exe
+            artifacts/**/GoSubtitle_win_portable_amd64.exe
           body: ${{ needs.changelog.outputs.changelog }}
           prerelease: ${{ steps.check-beta.outputs.is_beta }}
         env:
