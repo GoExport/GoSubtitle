@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>748</width>
-    <height>614</height>
+    <height>586</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -133,6 +133,34 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Advanced Settings</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QSpinBox" name="maxWordsSpinBox">
+            <property name="suffix">
+             <string> word(s)</string>
+            </property>
+            <property name="prefix">
+             <string>each line has </string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>20</number>
+            </property>
+            <property name="value">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_timeline">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -164,7 +192,7 @@
                <x>0</x>
                <y>0</y>
                <width>688</width>
-               <height>316</height>
+               <height>223</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="timelineLayout"/>
@@ -186,6 +214,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -195,17 +224,7 @@
      <height>33</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuGoSubtitle">
-    <property name="title">
-     <string>GoSubtitle</string>
-    </property>
-    <addaction name="actionSettings"/>
-    <addaction name="separator"/>
-    <addaction name="actionExit"/>
-   </widget>
-   <addaction name="menuGoSubtitle"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
