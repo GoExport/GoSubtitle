@@ -7,6 +7,8 @@ Exports:
 """
 
 from .window import MainWindow
+from .console import Console
+from .parameters import Parameters
 from .subtitle_processor import SubtitleProcessor
 
-__all__ = ['MainWindow', 'SubtitleProcessor']
+__all__ = ['MainWindow', 'SubtitleProcessor', 'Console', 'Parameters']

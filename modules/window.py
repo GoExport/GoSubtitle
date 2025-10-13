@@ -9,6 +9,7 @@ from typing import List, Dict, Optional
 import logging
 
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QWidget
+from PyQt6.QtGui import QIcon
 from PyQt6 import uic
 
 from .subtitle_processor import SubtitleProcessor
@@ -39,7 +40,10 @@ class MainWindow(QMainWindow):
         
         # Load UI from file
         uic.loadUi(str(UI_DIR / "main_window.ui"), self)
+        # Set window properties
+        self.icon = BASE_DIR / "assets" / "icon.ico"
         self.setWindowTitle("GoSubtitle")
+        self.setWindowIcon(QIcon(str(self.icon)))
         
         # Initialize subtitle processor
         self.processor = SubtitleProcessor()
@@ -106,6 +110,7 @@ class MainWindow(QMainWindow):
             
             # Reset offset when loading new file
             self.current_offset = 0.0
+            self.offsetSpinBox.setEnabled(True)
             self.offsetSpinBox.setValue(0)
             
             self.display_subtitles(self.subtitles)
