@@ -1,0 +1,120 @@
+name: Build, Release, and Notify
+on:
+  push:
+    tags:
+      - "v*"
+      - "b*"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-2022]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build with PyInstaller
+        run: pyinstaller GoSubtitle.spec
+
+      - name: Archive Linux Build
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          tar -czvf GoSubtitle_linux_portable_amd64.tar.gz -C dist .
+          mv GoSubtitle_linux_portable_amd64.tar.gz dist/
+
+      - name: Archive Windows Build
+        if: matrix.os == 'windows-2022'
+        run: |
+          powershell -Command "Compress-Archive -Path dist/* -DestinationPath GoSubtitle_win_installer_amd64.zip"
+          mv GoSubtitle_win_installer_amd64.zip dist/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.os }}
+          path: dist/
+          if-no-files-found: ignore
+
+  changelog:
+    runs-on: ubuntu-latest
+    needs: build
+    outputs:
+      changelog: ${{ steps.extract.outputs.changelog }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract changelog
+        id: extract
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          version="${version#b}"
+          section=$(awk '/## \['"$version"'\]/{flag=1; next} /^## /{flag=0} flag' CHANGELOG.md)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$section" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  release:
+    runs-on: ubuntu-latest
+    needs: changelog
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List downloaded files
+        run: ls -R artifacts
+
+      - name: Check if beta
+        id: check-beta
+        run: |
+          if [[ $GITHUB_REF_NAME == b* ]]; then
+            echo "is_beta=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_beta=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            artifacts/**/GoSubtitle_linux_portable_amd64.tar.gz
+            artifacts/**/GoSubtitle_win_installer_amd64.exe
+          body: ${{ needs.changelog.outputs.changelog }}
+          prerelease: ${{ steps.check-beta.outputs.is_beta }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Discord
+        if: steps.check-beta.outputs.is_beta == 'false'
+        run: |
+          repo_name="${GITHUB_REPOSITORY#*/}"
+          tag="${GITHUB_REF_NAME}"
+
+          payload=$(jq -n \
+            --arg role "<@&1346974681399427153>" \
+            --arg repo "$repo_name" \
+            --arg tag "$tag" \
+            --arg channel "<#1347670260844855376>" \
+            --arg changelog "$(cat <<'EOF'
+          ${{ needs.changelog.outputs.changelog }}
+          EOF
+          )" \
+            '{content: "\($role)\n\n# \($repo) - \($tag)\n\n\($changelog)\n\n\($channel)"}')
+
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "$payload" \
+            ${{ secrets.DISCORD_WEBHOOK }}
