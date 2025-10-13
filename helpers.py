@@ -6,9 +6,16 @@ and other common operations.
 """
 
 import os
+import ctypes
 from pathlib import Path
 from typing import Optional
 
+def has_console():
+    """Check whether the process has a console window attached."""
+    try:
+        return bool(ctypes.windll.kernel32.GetConsoleWindow())
+    except Exception:
+        return False
 
 def validate_xml_file(file_path: str) -> bool:
     """
