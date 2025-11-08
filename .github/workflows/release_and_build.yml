@@ -34,14 +34,13 @@ jobs:
 
       - name: Copy required files to dist
         run: |
-          cp readme.md dist/
+          cp README.md dist/
           cp LICENSE dist/
 
       - name: Archive Windows Build
         if: matrix.os == 'windows-latest'
         run: |
-          zip -r GoSubtitle_win_portable_amd64.zip dist/
-          mv GoSubtitle_win_portable_amd64.zip dist/
+          powershell -Command "Compress-Archive -Path dist\* -DestinationPath dist\GoSubtitle_win_portable_amd64.zip"
 
       - name: Archive Linux Build
         if: matrix.os == 'ubuntu-22.04'
