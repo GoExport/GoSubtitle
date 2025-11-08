@@ -2,9 +2,21 @@
 
 All notable changes to GoSubtitle are documented in this file.
 
-## [2.0.0] - Code Review Refactor
+## [1.0.0] - Initial Release & Major Refactor
 
-### Major Architectural Changes
+GoSubtitle allows you to convert GoAnimate XML movie.xml files to SRT subtitle format, with various editing features, you can easily create subtitles for your GoAnimate videos.
+
+### Features
+
+- Basic XML to SRT conversion
+- Speaker name editing
+- Mass speaker replacement
+- Frame-based offset adjustment
+- Timeline view of subtitles
+- Subtitle merging for overlapping dialogue
+- Automatic subtitle splitting based on word count
+
+### Major Architectural Changes (from v2.0.0)
 
 #### Added
 
@@ -23,18 +35,14 @@ All notable changes to GoSubtitle are documented in this file.
   - Improved code maintainability
   - Catches type errors early
 - **Docstrings**: Complete documentation for all classes and methods
-
   - Explains parameters and return values
   - Describes purpose and behavior
   - Better code discoverability
-
 - **Helper Functions** in `helpers.py`:
-
   - File validation utilities
   - Path handling functions
   - Duration formatting
   - Project directory helpers
-
 - **Module Exports**: Clean imports through `modules/__init__.py`
 
 #### Fixed
@@ -56,23 +64,17 @@ All notable changes to GoSubtitle are documented in this file.
 #### Changed
 
 - **Subtitle Content Now Editable**:
-
   - Changed `timeline_object.ui` readOnly property to false
   - Added `change_content` method to handle text changes
   - Connected textChanged signal with proper closure
-
 - **Better Error Messages**:
-
   - More specific error messages for different failure cases
   - Separate handling for FileNotFoundError vs ParseError
   - User-friendly warnings for edge cases
-
 - **Improved Code Organization**:
-
   - Separated GUI logic from business logic
   - Better method organization and grouping
   - Clearer responsibility separation
-
 - **Enhanced Validation**:
   - Check for XML structure validity
   - Validate required elements exist
@@ -111,21 +113,7 @@ All notable changes to GoSubtitle are documented in this file.
 - If extending the code, use `SubtitleProcessor` for subtitle operations
 - All paths now automatically resolve relative to script location
 
----
-
-## [1.0.0] - Initial Release
-
-### Features
-
-- Basic XML to SRT conversion
-- Speaker name editing
-- Mass speaker replacement
-- Frame-based offset adjustment
-- Timeline view of subtitles
-- Subtitle merging for overlapping dialogue
-- Automatic subtitle splitting based on word count
-
-### Known Issues (Fixed in 2.0.0)
+### Known Issues (Fixed in this release)
 
 - Lambda closure bug in speaker callbacks
 - Poor tab navigation
