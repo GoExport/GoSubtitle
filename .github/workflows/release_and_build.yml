@@ -101,7 +101,7 @@ jobs:
           tag_name: ${{ github.ref_name }}
           files: |
             artifacts/**/GoSubtitle_linux_portable_amd64.tar.gz
-            artifacts/**/GoSubtitle_win_portable_amd64.exe
+            artifacts/**/GoSubtitle_win_portable_amd64.zip
           body: ${{ needs.changelog.outputs.changelog }}
           prerelease: ${{ steps.check-beta.outputs.is_beta }}
         env:
