@@ -97,7 +97,13 @@ class Console:
         if replace_map:
             print("Applying speaker replacements...")
             self.apply_speaker_replacements(replace_map)
-        
+
+        # Apply text replacements if specified
+        replace_text_map = params.get_param_value('replace_texts')
+        if replace_text_map:
+            print("Applying text replacements...")
+            self.apply_text_replacements(replace_text_map)
+
         # Apply max words per line if specified
         max_words = params.get_param_value('max_words')
         if max_words and max_words != self.processor.max_words_per_line:
@@ -109,6 +115,8 @@ class Console:
                 SubtitleProcessor.apply_offset(self.subtitles, offset)
             if replace_map:
                 self.apply_speaker_replacements(replace_map)
+            if replace_text_map:
+                self.apply_text_replacements(replace_text_map)
         
         # Display subtitle statistics
         if params.get_param_value('verbose'):
@@ -147,6 +155,32 @@ class Console:
             new_name = replace_map[old_name]
             print(f"  Replaced '{old_name}' with '{new_name}' ({count} occurrence(s))")
             logger.info(f"Replaced speaker '{old_name}' with '{new_name}' ({count} occurrences)")
+
+    def apply_text_replacements(self, replace_map: Dict[str, str]) -> None:
+        """
+        Replace text strings within subtitle content according to the provided mapping.
+
+        Replacements are applied sequentially per subtitle in the iteration order of
+        replace_map. If multiple entries share overlapping patterns (e.g. 'A' -> 'B'
+        and 'B' -> 'C'), the second rule may affect text already changed by the first.
+        Use distinct, non-overlapping patterns to avoid unintended cascading.
+
+        Args:
+            replace_map: Dictionary mapping old text strings to new strings
+        """
+        replacement_count = {}
+
+        for subtitle in self.subtitles:
+            for old_text, new_text in replace_map.items():
+                if old_text in subtitle['text']:
+                    subtitle['text'] = subtitle['text'].replace(old_text, new_text)
+                    replacement_count[old_text] = replacement_count.get(old_text, 0) + 1
+
+        # Log replacements
+        for old_text, count in replacement_count.items():
+            new_text = replace_map[old_text]
+            print(f"  Replaced '{old_text}' with '{new_text}' ({count} subtitle(s) affected)")
+            logger.info(f"Replaced text '{old_text}' with '{new_text}' ({count} subtitle(s) affected)")
     
     def display_statistics(self) -> None:
         """Display statistics about the loaded subtitles."""

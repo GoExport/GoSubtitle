@@ -133,6 +133,46 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_text">
+         <property name="title">
+          <string>Mass replace text</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_text">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_text">
+            <item>
+             <widget class="QLineEdit" name="textFindInput">
+              <property name="placeholderText">
+               <string>Find</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="textReplaceInput">
+              <property name="placeholderText">
+               <string>Replace with</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="textReplaceButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Replace</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Advanced Settings</string>
