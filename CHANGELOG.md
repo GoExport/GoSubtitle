@@ -2,6 +2,11 @@
 
 All notable changes to GoSubtitle are documented in this file.
 
+## [1.1.0] - Minor Update
+
+### Added
+- Added the ability to replace text content in subtitles using the `-t/--replace-text` command-line argument, allowing users to specify text replacements in the format "OldText:NewText" this is also a feature in the UI.
+
 ## [1.0.0] - Initial Release & Major Refactor
 
 GoSubtitle allows you to convert GoAnimate XML movie.xml files to SRT subtitle format, with various editing features, you can easily create subtitles for your GoAnimate videos.

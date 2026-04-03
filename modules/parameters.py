@@ -93,7 +93,7 @@ class Parameters:
         self.parser.add_argument(
             '--version',
             action='version',
-            version='GoSubtitle 1.0.0',
+            version='GoSubtitle 1.1.0',
             help='Show program version and exit'
         )
         
