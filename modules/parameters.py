@@ -24,6 +24,7 @@ class Parameters:
                    "  GoSubtitle.exe -f movie.xml\n"
                    "  GoSubtitle.exe -f movie.xml -s subtitles.srt -o 24\n"
                    "  GoSubtitle.exe -f movie.xml -r \"John:Jane\" -r \"Bob:Robert\"\n"
+                   "  GoSubtitle.exe -f movie.xml -t \"WeAnimate:We Animate\"\n"
                    "  GoSubtitle.exe -f movie.xml --max-words 15 --verbose\n",
             formatter_class=argparse.RawDescriptionHelpFormatter
         )
@@ -73,6 +74,14 @@ class Parameters:
             dest='replace_list',
             help='Replace speaker names in format "OldName:NewName" (can be used multiple times)'
         )
+
+        self.parser.add_argument(
+            '-t', '--replace-text',
+            action='append',
+            metavar='OLD:NEW',
+            dest='replace_text_list',
+            help='Replace text content in format "OldText:NewText" (can be used multiple times)'
+        )
         
         # Output options
         self.parser.add_argument(
@@ -92,6 +101,8 @@ class Parameters:
         
         # Process speaker replacements into a dictionary
         self._process_speaker_replacements()
+        # Process text replacements into a dictionary
+        self._process_text_replacements()
     
     def _process_speaker_replacements(self) -> None:
         """
@@ -120,6 +131,31 @@ class Parameters:
         
         # Store the processed map
         self.args.replace_speakers = replace_map if replace_map else None
+
+    def _process_text_replacements(self) -> None:
+        """
+        Process the list of text replacements into a dictionary.
+
+        Converts command-line arguments like "WeAnimate:We Animate" into a
+        dictionary mapping old strings to new strings.
+        """
+        replace_map = {}
+
+        if self.args.replace_text_list:
+            for replacement in self.args.replace_text_list:
+                if ':' not in replacement:
+                    print(f"Warning: Invalid replacement format '{replacement}'. Expected 'OldText:NewText'")
+                    continue
+
+                old_text, new_text = replacement.split(':', 1)
+
+                if not old_text:
+                    print(f"Warning: Empty search text in replacement '{replacement}'")
+                    continue
+
+                replace_map[old_text] = new_text
+
+        self.args.replace_texts = replace_map if replace_map else None
 
     def get_param_value(self, param_name: str):
         """

@@ -53,6 +53,7 @@ class MainWindow(QMainWindow):
         self.saveButton.clicked.connect(self.save_srt)
         self.offsetSpinBox.valueChanged.connect(self.offset_beginning)
         self.massButtonoSave.clicked.connect(self.mass_replace_speaker)
+        self.textReplaceButton.clicked.connect(self.mass_replace_text)
         self.maxWordsSpinBox.valueChanged.connect(self.update_max_words_per_line)
         
         # State variables
@@ -357,6 +358,52 @@ class MainWindow(QMainWindow):
             f"Replaced {replace_count} occurrence(s) of '{selected_speaker}' with '{replacement_text}'."
         )
         logger.info(f"Mass replaced {replace_count} occurrences of '{selected_speaker}' with '{replacement_text}'")
+    
+    def mass_replace_text(self) -> None:
+        """
+        Replace all occurrences of a text string across all subtitle content.
+
+        Performs a case-sensitive substring replacement on every subtitle's text
+        and shows a confirmation dialog with the number of subtitles modified.
+        """
+        if not self.subtitles:
+            QMessageBox.warning(
+                self,
+                "No Subtitles",
+                "No subtitles to modify. Please load a Movie XML file first."
+            )
+            logger.warning("Attempted text replace with no subtitles loaded")
+            return
+
+        find_text = self.textFindInput.text()
+        if not find_text:
+            QMessageBox.warning(
+                self,
+                "Empty Search Text",
+                "Please enter the text you want to find."
+            )
+            logger.warning("Text replace attempted with empty find field")
+            return
+
+        replace_text = self.textReplaceInput.text()
+
+        replace_count = 0
+        for subtitle in self.subtitles:
+            if find_text in subtitle['text']:
+                subtitle['text'] = subtitle['text'].replace(find_text, replace_text)
+                replace_count += 1
+
+        self.display_subtitles(self.subtitles)
+
+        self.textFindInput.clear()
+        self.textReplaceInput.clear()
+
+        QMessageBox.information(
+            self,
+            "Success",
+            f"Replaced '{find_text}' with '{replace_text}' in {replace_count} subtitle(s)."
+        )
+        logger.info(f"Mass replaced text '{find_text}' with '{replace_text}' in {replace_count} subtitle(s)")
     
     def save_srt(self) -> None:
         """
