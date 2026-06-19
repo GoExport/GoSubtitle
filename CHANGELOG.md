@@ -2,6 +2,11 @@
 
 All notable changes to GoSubtitle are documented in this file.
 
+## [1.1.1] - Small UI adjustment
+
+### Added
+- Added a spacer between the timeline and the "Advanced Settings" to make the UI look better.
+
 ## [1.1.0] - Minor Update
 
 ### Added
